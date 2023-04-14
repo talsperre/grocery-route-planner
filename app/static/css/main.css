@@ -1,0 +1,60 @@
+html, body {
+    height: 100%;
+}
+.wrapper {
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    grid-template-rows: 1fr 1fr 1fr 9fr;
+    /* grid-template-rows: 1fr 1fr 1fr 5fr; */
+    /* grid-template-rows: 40px 1fr 1fr 5fr;     */
+    gap: 10px;
+    padding-left: 15%;
+    padding-right: 15%;
+    padding-top: 1%;
+    height: 100%;
+    padding-bottom: 1%;
+}
+
+.title-bar {
+    grid-column: 1 / 3;
+    grid-row: 1;
+}
+
+.nav-left {
+    grid-column: 1 / 2;
+    grid-row: 2 / 12;
+}
+
+.nav-right {
+    grid-column: 2 / 3;
+    grid-row: 2;
+}
+
+.route-box {
+    grid-column: 2 / 3;
+    grid-row: 3 / 12;
+    background: green;
+}
+
+.item-list {
+    height: 100px;
+    overflow-y: scroll;
+    padding-left: 5%;
+    padding-right: 5%;
+    padding-top: 4%;
+    padding-bottom: 4%;
+}
+
+.item-list span {
+    min-width: 70px;
+}
+
+.route-optimization {
+    margin-top: 10px;
+}
+
+.results {
+    /* height: 100%; */
+    height: fit-content;
+    /* flex: 1; */
+}
