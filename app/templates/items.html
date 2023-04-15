@@ -4,38 +4,46 @@
 <div class="item-box">
     <div class="card bg-light mb-3" style="width: 100%; height: 100%;">
         <h3 class="card-header">{{ item_name }}</h3>
-        <h5 class="card-title">Please unselect the items you <b>don't</b> like</h5>
-        <div class="card-body" style="overflow-y: scroll;">            
-            <table class="table table-hover">
-                <thead>
-                  <tr class="table-active">
-                    <th scope="col">Name</th>
-                    <th scope="col">Store</th>
-                    <th scope="col">Price</th>
-                    <th scope="col">Quantity</th>
-                    <th scope="col">Unit</th>
-                    <th scope="col">Select</th>
-                  </tr>
-                </thead>
-                <tbody>
-                    {% with selected_items = session["selected_items"] %}
-                    {% for row in selected_items[item_name] %}
-                        {% if loop.index % 2 == 0 %}
-                            <tr class="table-active">
-                        {% else %}
-                            <tr>
-                        {% endif %}
-                        <td>{{ row[0] }}</td>
-                        <td>{{ row[1] }}</td>
-                        <td>{{ row[2] }}</td>
-                        <td>{{ row[3] }}</td>
-                        <td>{{ row[4] }}</td>
-                        <td></td>
-                        </tr>
-                    {% endfor %}
-                    {% endwith %}
-                </tbody>    
-            </table>    
+        <div class="card-body" style="overflow-y: scroll;">
+            <h5 class="card-title">Please unselect the items you <b>don't</b> like</h5>
+            <form  action="{{ url_for('items', item_name=item_name) }}" method="post" class="form-group" novalidate>
+                {{ select_form.hidden_tag() }}
+                <table class="table table-hover">
+                    <thead>
+                    <tr class="table-active">
+                        <th scope="col">Num</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Store</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Unit</th>
+                        <th scope="col"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% with selected_items = session["selected_items"] %}
+                        {% for row in selected_items[item_name] %}
+                            {% if loop.index % 2 == 0 %}
+                                <tr class="table-active">
+                            {% else %}
+                                <tr>
+                            {% endif %}
+                            <td>{{ loop.index }}.</td>
+                            <td>{{ row[0] }}</td>
+                            <td>{{ row[1] }}</td>
+                            <td>{{ row[2] }}</td>
+                            <td>{{ row[3] }}</td>
+                            <td>{{ row[4] }}</td>
+                            <td style="text-align: center;">
+                                {{ select_form.checkbox_field(id=loop.index|string) }}
+                            </td>
+                            </tr>
+                        {% endfor %}
+                        {% endwith %}
+                    </tbody>
+                </table>
+                {{ select_form.item_submit(class_="btn btn-primary") }}
+            </form>
         </div>
     </div>
 </div>

@@ -1,6 +1,6 @@
 from flask import render_template, flash, url_for, redirect, session
 from app import app
-from app.forms import LocationForm, SearchForm, ItemForm
+from app.forms import LocationForm, SearchForm, SelectForm
 from app.controller.location_utils import geolocate
 from app.controller.search_utils import grocery_search
 
@@ -57,13 +57,20 @@ def search():
 
 @app.route('/items/<item_name>', methods=['GET', 'POST'])
 def items(item_name):
-    item_form = ItemForm()
+    select_form = SelectForm()
     selected_items = session["selected_items"]
 
     if item_name not in selected_items:
         flash("The item {} has not yet been selected".format(item_name))
         return redirect("/index")
+    
+    if select_form.validate_on_submit():
+        checkbox_output = select_form.checkbox_field.data
+        print("test output: {}".format(checkbox_output))
+        for i in range(5):
+            print(select_form.checkbox_field.data[i])
+        return redirect("/index")
 
     print("Inside items function / route")
     print(selected_items[item_name])
-    return render_template('items.html', item_name=item_name)
+    return render_template('items.html', item_name=item_name, select_form=select_form)
