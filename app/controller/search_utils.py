@@ -38,7 +38,7 @@ class GrocerySearch(object):
         parsed_query = self.parser.parse(query)
         for store in self.stores:
             filter_term = Term("store", store)
-            results = self.searcher.search(parsed_query, filter=filter_term, limit=7)
+            results = self.searcher.search(parsed_query, filter=filter_term, limit=5)
             for hit in results:
                 results_list.append([hit["name"], hit["store"], hit["price"], hit["quantity"], hit["unit"]])
                 # print(results_list[-1])

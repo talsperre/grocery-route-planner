@@ -6,8 +6,8 @@
         <div class="card-body">
             <form  action="{{ url_for('search') }}" method="post" class="input-group mb-3" novalidate>
                 {{ search_form.hidden_tag() }}
-                {{ search_form.item(class_="form-control", placeholder="Milk")}}
-                {{ search_form.item_submit(class_="btn btn-primary") }}
+                {{ search_form.search(class_="form-control", placeholder="Milk")}}
+                {{ search_form.search_submit(class_="btn btn-primary") }}
             </form>
             <div class="card border-dark item-list">
                 <div>

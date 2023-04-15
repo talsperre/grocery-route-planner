@@ -10,6 +10,10 @@ class LocationForm(FlaskForm):
 
 
 class SearchForm(FlaskForm):
-    text = Markup('<i class="fa-solid fa-shopping-cart"></i>')
+    search = StringField('Search')
+    search_submit = SubmitField('Go')
+
+
+class ItemForm(FlaskForm):
     item = StringField('Item')
     item_submit = SubmitField('Go')

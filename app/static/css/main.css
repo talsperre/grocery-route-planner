@@ -58,7 +58,9 @@ html, body {
 }
 
 .item-box {
-    grid-column: 1 / 4;
+    grid-column: 1 / 3;
     grid-row: 2 / 12;
-    background-color: green;
+    /* height: fit-content; */
+    overflow-y: scroll;
+    /* background-color: green; */
 }
