@@ -66,6 +66,6 @@
     </div>
 </div>
 <div class="route-box">
-    {{ map_html|safe }}
+    <iframe src="{{ url_for('show_map') }}"></iframe>
 </div>
 {% endblock %}

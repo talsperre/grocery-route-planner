@@ -8,7 +8,9 @@ from whoosh.query import Term
 
 
 class GrocerySearch(object):
-    def __init__(self):
+    def __init__(self, store_limit=3):
+        # Number of items to search in each store
+        self.store_limit = store_limit
         # Define the path where the index will be stored
         self.index_dir = os.path.abspath("./app/controller/index")
 
@@ -38,7 +40,7 @@ class GrocerySearch(object):
         parsed_query = self.parser.parse(query)
         for store in self.stores:
             filter_term = Term("store", store)
-            results = self.searcher.search(parsed_query, filter=filter_term, limit=5)
+            results = self.searcher.search(parsed_query, filter=filter_term, limit=self.store_limit)
             for hit in results:
                 results_list.append([hit["name"], hit["store"], hit["price"], hit["quantity"], hit["unit"]])
                 # print(results_list[-1])

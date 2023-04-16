@@ -22,7 +22,7 @@
                     </thead>
                     <tbody>
                         {% with selected_items = session["selected_items"] %}
-                        {% for row in selected_items[item_name] %}
+                        {% for row, checkbox in zip(selected_items[item_name], select_form.checkboxes) %}
                             {% if loop.index % 2 == 0 %}
                                 <tr class="table-active">
                             {% else %}
@@ -35,7 +35,7 @@
                             <td>{{ row[3] }}</td>
                             <td>{{ row[4] }}</td>
                             <td style="text-align: center;">
-                                {{ select_form.checkbox_field(id=loop.index|string) }}
+                                {{ checkbox.checkbox }}
                             </td>
                             </tr>
                         {% endfor %}
