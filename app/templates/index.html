@@ -3,7 +3,7 @@
 {% block content %}
 <div class="nav-left">
     <div class="card bg-light mb-3" style="height: 100%;">
-        <div class="card-body">
+        <div class="card-body" style="overflow-y: scroll;">
             <form  action="{{ url_for('search') }}" method="post" class="input-group mb-3" novalidate>
                 {{ search_form.hidden_tag() }}
                 {{ search_form.search(class_="form-control", placeholder="Milk")}}
@@ -25,13 +25,30 @@
                     {{ optimize_form.optimize_submit(class_="btn btn-info optimize-button") }}
                 </form>    
             </div>
-            <div class="card border-dark mb-3 results">
-                <div class="card-header">Route Results</div>
-                <div class="card-body">
-                  <h4 class="card-title">Dark card title</h4>
-                  <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            {% if "final_results" in session %}
+                <div class="card border-dark mb-3 results">
+                    <div class="card-header">Optimized Plan</div>
+                    <div class="card-body" style="overflow-y: scroll;">
+                        {% for store_name, items_list in session["final_results"]["final_combo"].items() %}
+                            <h6>{{ store_name.title() }}</h6>
+                            <table class="table table-hover">
+                                <tbody>
+                                    <tr>
+                                        <td></td>
+                                        <td class="results-table">Price</td>
+                                    </tr>
+                                {% for item in items_list %}
+                                    <tr>
+                                        <td class="results-table">{{ item[1] }}</td>
+                                        <td class="results-table">{{ item[2] }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+                        {% endfor %}
+                    <!-- <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p> -->
+                    </div>
                 </div>
-            </div>
+            {% endif %}
         </div>
     </div>
 </div>
@@ -60,7 +77,16 @@
                 {{ location_form.location_submit(class_="btn btn-primary") }}
             </form>
             {% if "formatted_address" in session %}
-                <span class="badge bg-warning">{{ session["formatted_address"] }}</span>
+                <span class="badge bg-warning">Start Location: {{ session["formatted_address"] }}</span>
+            {% endif %}
+            {% if "final_results" in session %}
+                <span class="badge bg-success"> Total Price: {{ session["final_results"]["final_price"] }}</span>
+            {% endif %}
+            {% if "final_results" in session %}
+                <span class="badge bg-secondary"> Total Distance: {{ session["final_results"]["total_driving_distance"] }} meters</span>
+            {% endif %}
+            {% if "final_results" in session %}
+                <span class="badge bg-danger"> Total Time: {{ session["final_results"]["total_driving_time"] }} minutes</span>
             {% endif %}
         </div>
     </div>

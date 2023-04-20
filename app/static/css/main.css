@@ -53,8 +53,9 @@ html, body {
 
 .results {
     /* height: 100%; */
-    height: fit-content;
+    /* height: fit-content; */
     /* flex: 1; */
+    overflow-y: scroll;
 }
 
 .item-box {
@@ -67,4 +68,8 @@ html, body {
     width: 100%; 
     margin-top: 10px; 
     margin-bottom: 10px;
+}
+
+.results-table {
+    font-size: 12px;
 }
