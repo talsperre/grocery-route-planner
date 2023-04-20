@@ -31,7 +31,7 @@ html, body {
 .route-box {
     grid-column: 2 / 3;
     grid-row: 3 / 12;
-    background: green;
+    /* background: green; */
 }
 
 .item-list {
