@@ -27,14 +27,15 @@ def get_map(start_location=None, formatted_address=None, route_polyline=None, de
     if destination_list is not None:
         for i, destination in enumerate(destination_list):
             marker_color = folium_colors[i]
-            destination_name = destination["name"]
+            store_name = destination["store_name"].title()
+            destination_address = destination["address"]
             lat = destination["lat"]
             lng = destination["lng"]
             folium.Marker(
                 location=(lat, lng), 
                 icon=folium.Icon(prefix='fa', icon='circle', color=marker_color),
-                popup=folium.Popup(destination_name),
-                tooltip=destination_name, 
+                popup=folium.Popup("{}: {}".format(store_name, destination_address)),
+                tooltip="{}: {}".format(store_name, destination_address), 
                 color=marker_color
             ).add_to(m)
 

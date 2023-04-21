@@ -27,12 +27,14 @@ def index():
     if "formatted_address" in session:
         if "final_results" in session:
             list_of_locations = session["final_results"]["list_of_locations"]
+            store_names = session["final_results"]["chain_order"]
             destination_list = []
-            for location in list_of_locations[1:-1]:
+            for i, location in enumerate(list_of_locations[1:-1]):
                 gmaps_api_secret_key = app.config["GMAPS_API_SECRET_KEY"]
                 _, geocode_location = geolocate(location, gmaps_api_secret_key)
                 destination_list.append({
-                    "name": location,
+                    "store_name": store_names[i],
+                    "address": location,
                     "lat": geocode_location["lat"],
                     "lng": geocode_location["lng"]
                 })
@@ -175,9 +177,22 @@ def optimize():
                                              optimize_waypoints=True)
         distance_by_stops = [ leg["distance"]["value"] for leg in directions_result[0]["legs"] ]
 
+        num_hours = min_time_spent // 3600
+        num_minutes = (min_time_spent % 3600) // 60
+
+        if num_hours > 0:
+            formatted_time = "{} hour, {} minutes".format(num_hours, num_minutes)
+        else:
+            formatted_time = "{} minutes".format(num_minutes)        
+
+        formatted_distance = "{:.2f}".format(sum(distance_by_stops) / 1000.0)
+
         session["final_results"] = {
             "final_price": final_price,
             "final_combo": final_combo,
+            "formatted_time": formatted_time,
+            "formatted_distance": formatted_distance,
+            "chain_order": [ route["store"] for route in min_time_route ],
             "list_of_locations": [directions_result[0]["legs"][0]["start_address"]] + [ leg["end_address"] for leg in directions_result[0]["legs"] ],
             "total_driving_time": min_time_spent,
             "total_driving_distance": sum(distance_by_stops),

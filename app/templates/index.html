@@ -29,7 +29,8 @@
                 <div class="card border-dark mb-3 results">
                     <div class="card-header">Optimized Plan</div>
                     <div class="card-body" style="overflow-y: scroll;">
-                        {% for store_name, items_list in session["final_results"]["final_combo"].items() %}
+                        {% for store_name in session["final_results"]["chain_order"] %}
+                            {% with items_list = session["final_results"]["final_combo"][store_name] %}
                             <h6>{{ store_name.title() }}</h6>
                             <table class="table table-hover">
                                 <tbody>
@@ -44,6 +45,7 @@
                                     </tr>
                                 {% endfor %}
                             </table>
+                            {% endwith %}
                         {% endfor %}
                     <!-- <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p> -->
                     </div>
@@ -80,13 +82,13 @@
                 <span class="badge bg-warning">Start Location: {{ session["formatted_address"] }}</span>
             {% endif %}
             {% if "final_results" in session %}
-                <span class="badge bg-success"> Total Price: {{ session["final_results"]["final_price"] }}</span>
+                <span class="badge bg-success"> Total Price: ${{ session["final_results"]["final_price"] }}</span>
             {% endif %}
             {% if "final_results" in session %}
-                <span class="badge bg-secondary"> Total Distance: {{ session["final_results"]["total_driving_distance"] }} meters</span>
+                <span class="badge bg-secondary"> Total Distance: {{ session["final_results"]["formatted_distance"] }} km</span>
             {% endif %}
             {% if "final_results" in session %}
-                <span class="badge bg-danger"> Total Time: {{ session["final_results"]["total_driving_time"] }} minutes</span>
+                <span class="badge bg-danger"> Total Time: {{ session["final_results"]["formatted_time"] }}</span>
             {% endif %}
         </div>
     </div>
