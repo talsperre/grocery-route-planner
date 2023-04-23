@@ -3,13 +3,11 @@ html, body {
 }
 .wrapper {
     display: grid;
-    grid-template-columns: 1fr 3fr;
+    grid-template-columns: 1fr 4fr;
     grid-template-rows: 1fr 1fr 1fr 9fr;
-    /* grid-template-rows: 1fr 1fr 1fr 5fr; */
-    /* grid-template-rows: 40px 1fr 1fr 5fr;     */
     gap: 10px;
-    padding-left: 15%;
-    padding-right: 15%;
+    padding-left: 12%;
+    padding-right: 12%;
     padding-top: 1%;
     height: 100%;
     padding-bottom: 1%;
@@ -33,7 +31,7 @@ html, body {
 .route-box {
     grid-column: 2 / 3;
     grid-row: 3 / 12;
-    background: green;
+    /* background: green; */
 }
 
 .item-list {
@@ -55,6 +53,23 @@ html, body {
 
 .results {
     /* height: 100%; */
-    height: fit-content;
+    /* height: fit-content; */
     /* flex: 1; */
+    overflow-y: scroll;
+}
+
+.item-box {
+    grid-column: 1 / 3;
+    grid-row: 2 / 12;
+    overflow-y: scroll;
+}
+
+.optimize-button {
+    width: 100%; 
+    margin-top: 10px; 
+    margin-bottom: 10px;
+}
+
+.results-table {
+    font-size: 12px;
 }

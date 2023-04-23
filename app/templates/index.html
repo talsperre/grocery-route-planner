@@ -1,4 +1,110 @@
 {% extends "base.html" %}
 
 {% block content %}
+<div class="nav-left">
+    <div class="card bg-light mb-3" style="height: 100%;">
+        <div class="card-body" style="overflow-y: scroll;">
+            <form  action="{{ url_for('search') }}" method="post" class="input-group mb-3" novalidate>
+                {{ search_form.hidden_tag() }}
+                {{ search_form.search(class_="form-control", placeholder="Milk")}}
+                {{ search_form.search_submit(class_="btn btn-primary") }}
+            </form>
+            <div class="card border-dark item-list">
+                <div>
+                    {% if "selected_items" in session %}
+                        {% for item_name in session["selected_items"].keys() %}
+                            <span class="badge bg-warning">{{ item_name }}</span>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>    
+            <div class="route-optimization">
+                <form action="{{ url_for('optimize') }}" method="post" class="form-group" novalidate>
+                    {{ optimize_form.hidden_tag() }}
+                    {{ optimize_form.optimize_type(class_="form-select")}}
+                    {% if "final_results" in session %}
+                        {{ optimize_form.optimize_submit(class_="btn btn-info disabled optimize-button") }}
+                    {% else %}
+                        {{ optimize_form.optimize_submit(class_="btn btn-info optimize-button") }}
+                    {% endif %}
+                </form>    
+            </div>
+            {% if "final_results" in session %}
+                <div class="card border-dark mb-3 results">
+                    <div class="card-header">Optimized Plan</div>
+                    <div class="card-body" style="overflow-y: scroll;">
+                        {% for store_name in session["final_results"]["chain_order"] %}
+                            {% with items_list = session["final_results"]["final_combo"][store_name] %}
+                            <h6>{{ store_name.title() }}</h6>
+                            <table class="table table-hover">
+                                <tbody>
+                                    <tr>
+                                        <td></td>
+                                        <td class="results-table">Price</td>
+                                    </tr>
+                                {% for item in items_list %}
+                                    <tr>
+                                        <td class="results-table">{{ item[1] }}</td>
+                                        <td class="results-table">{{ item[2] }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+                            {% endwith %}
+                        {% endfor %}
+                    <!-- <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p> -->
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+<div class="nav-right">
+    <div class="card bg-light mb-3" style="width: 100%; height: 100%;">
+        <div class="card-body">
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-dismissible alert-danger">
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        <strong>Oh snap!</strong> {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+            {% endwith %}            
+            <form  action="{{ url_for('location') }}" method="post" class="input-group mb-3" novalidate>
+                {{ location_form.hidden_tag() }}
+                <span class="input-group-text"><i class="fa-solid fa-magnifying-glass"></i></span>
+                {% if "formatted_address" not in session %}
+                    {{ location_form.location(class_="form-control", placeholder="Enter Start Location")}}
+                {% else %}
+                    {{ location_form.location(class_="form-control", placeholder="Replace Start Location")}}
+                {% endif %}
+                
+                {{ location_form.location_submit(class_="btn btn-primary") }}
+            </form>
+            {% if "formatted_address" in session %}
+                <span class="badge bg-warning">Start Location: {{ session["formatted_address"] }}</span>
+            {% endif %}
+            {% if "final_results" in session %}
+                <span class="badge bg-success"> Total Price: ${{ session["final_results"]["final_price"] }}</span>
+            {% endif %}
+            {% if "final_results" in session %}
+                <span class="badge bg-secondary"> Total Distance: {{ session["final_results"]["formatted_distance"] }} km</span>
+            {% endif %}
+            {% if "final_results" in session %}
+                <span class="badge bg-danger"> Total Time: {{ session["final_results"]["formatted_time"] }}</span>
+            {% endif %}
+            <br>
+            {% if "final_results" in session %}
+                The order of stores is:
+                {% for store_name in session["final_results"]["chain_order"] %}
+                    <span class="badge bg-info"> {{ store_name.title() }}</span>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+</div>
+<div class="route-box">
+    {{ map_html|safe }}
+</div>
 {% endblock %}

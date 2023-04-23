@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="nav-left">
+    <div class="card bg-light mb-3" style="height: 100%;">
+        <div class="card-body">
+            <form  action="{{ url_for('search') }}" method="post" class="input-group mb-3" novalidate>
+                {{ search_form.hidden_tag() }}
+                {{ search_form.search(class_="form-control", placeholder="Milk")}}
+                {{ search_form.search_submit(class_="btn btn-primary") }}
+            </form>
+            <div class="card border-dark item-list">
+                <div>
+                    {% if "selected_items" in session %}
+                        {% for item_name in session["selected_items"].keys() %}
+                            <span class="badge bg-warning">{{ item_name }}</span>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>    
+            <div class="route-optimization">
+                <form action="{{ url_for('optimize') }}" method="post" class="form-group" novalidate>
+                    {{ optimize_form.hidden_tag() }}
+                    {{ optimize_form.optimize_type(class_="form-select")}}
+                    {{ optimize_form.optimize_submit(class_="btn btn-info optimize-button") }}
+                </form>    
+            </div>
+            <div class="card border-dark mb-3 results">
+                <div class="card-header">Route Results</div>
+                <div class="card-body">
+                  <h4 class="card-title">Dark card title</h4>
+                  <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="nav-right">
+    <div class="card bg-light mb-3" style="width: 100%; height: 100%;">
+        <div class="card-body">
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-dismissible alert-danger">
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        <strong>Oh snap!</strong> {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+            {% endwith %}            
+            <form  action="{{ url_for('location') }}" method="post" class="input-group mb-3" novalidate>
+                {{ location_form.hidden_tag() }}
+                <span class="input-group-text"><i class="fa-solid fa-magnifying-glass"></i></span>
+                {% if "formatted_address" not in session %}
+                    {{ location_form.location(class_="form-control", placeholder="Enter Start Location")}}
+                {% else %}
+                    {{ location_form.location(class_="form-control", placeholder="Replace Start Location")}}
+                {% endif %}
+                
+                {{ location_form.location_submit(class_="btn btn-primary") }}
+            </form>
+            {% if "formatted_address" in session %}
+                <span class="badge bg-warning">{{ session["formatted_address"] }}</span>
+            {% endif %}
+        </div>
+    </div>
+</div>
+<div class="route-box">
+    <iframe src="{{ url_for('show_map') }}"></iframe>
+</div>
+{% endblock %}
