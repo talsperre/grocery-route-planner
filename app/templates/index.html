@@ -22,7 +22,11 @@
                 <form action="{{ url_for('optimize') }}" method="post" class="form-group" novalidate>
                     {{ optimize_form.hidden_tag() }}
                     {{ optimize_form.optimize_type(class_="form-select")}}
-                    {{ optimize_form.optimize_submit(class_="btn btn-info optimize-button") }}
+                    {% if "final_results" in session %}
+                        {{ optimize_form.optimize_submit(class_="btn btn-info disabled optimize-button") }}
+                    {% else %}
+                        {{ optimize_form.optimize_submit(class_="btn btn-info optimize-button") }}
+                    {% endif %}
                 </form>    
             </div>
             {% if "final_results" in session %}
@@ -89,6 +93,13 @@
             {% endif %}
             {% if "final_results" in session %}
                 <span class="badge bg-danger"> Total Time: {{ session["final_results"]["formatted_time"] }}</span>
+            {% endif %}
+            <br>
+            {% if "final_results" in session %}
+                The order of stores is:
+                {% for store_name in session["final_results"]["chain_order"] %}
+                    <span class="badge bg-info"> {{ store_name.title() }}</span>
+                {% endfor %}
             {% endif %}
         </div>
     </div>
